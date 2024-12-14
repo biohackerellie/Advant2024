@@ -6,6 +6,7 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func parse(input []byte) ([]int, []int) {
@@ -42,8 +43,27 @@ func getDistances(arr1, arr2 []int) []int {
 	return distances
 }
 
+func findSimilarities(arr1, arr2 []int) int {
+	var similarities []int
+	for _, num := range arr1 {
+		count := 0
+		for _, num2 := range arr2 {
+			if num == num2 {
+				count++
+			}
+		}
+		similarities = append(similarities, count*num)
+	}
+	var result int
+	for _, similarity := range similarities {
+		result += similarity
+	}
+	return result
+}
+
 func main() {
 	var result int
+	timeStart := time.Now()
 	input, err := os.ReadFile("input.txt")
 	if err != nil {
 		fmt.Println(err)
@@ -58,5 +78,9 @@ func main() {
 	for _, distance := range distances {
 		result += distance
 	}
+
+	similarities := findSimilarities(arr1, arr2)
+	fmt.Println("The total similarities is: ", similarities)
 	fmt.Println("The total distance is: ", result)
+	fmt.Println("Time taken: ", time.Since(timeStart))
 }
